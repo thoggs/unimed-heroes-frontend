@@ -17,6 +17,9 @@ docker-compose up -d
 ### Concluído:
 > Agora temos o app rodando localmente no endereço http://localhost:8081/
 
+### Deployed
+> Deploy do app no meu serviço pessoal: https://unimed-frontend.codesumn.com/
+
 ## Project setup
 ```
 npm install
