@@ -146,11 +146,21 @@ function handleCurrentChange(val: number) {
   height: 70px;
   display: flex;
   align-items: center;
+  overflow: hidden;
+  position: relative;
 }
 
 .text-content {
   font-size: 12px;
   color: #999;
+  position: absolute;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
+  max-height: calc(1.5 * 4 * 14px);
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .card-content {
