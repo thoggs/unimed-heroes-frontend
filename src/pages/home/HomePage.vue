@@ -97,8 +97,9 @@ function handleCurrentChange(val: number) {
                 <el-text class="text-content">{{ hero.description }}</el-text>
               </div>
             </div>
-            <div @click="onSubmitFavorite(hero.id)" class="delete-button">
+            <div class="delete-button">
               <el-button
+                @click="onSubmitFavorite(hero.id)"
                 :loading="loadingId === hero.id && favoriteLoading"
                 :disabled="favoriteLoading"
                 :icon="Star"
