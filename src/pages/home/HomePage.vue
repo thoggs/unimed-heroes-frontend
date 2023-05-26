@@ -92,9 +92,9 @@ function handleCurrentChange(val: number) {
               </div>
             </div>
             <div :style="{padding: '14px'}">
-              <el-text tag="b">{{ hero.name }}</el-text>
+              <el-text tag="b" truncated>{{ hero.name }}</el-text>
               <div class="text-description-container">
-                <el-text class="text-content">{{ hero.description }}</el-text>
+                <text class="text-content" type="info">{{ hero.description }}</text>
               </div>
             </div>
             <div class="delete-button">
