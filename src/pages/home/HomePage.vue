@@ -21,13 +21,12 @@ onMounted(() => {
 
 function onSubmitList() {
   fullscreenLoading.value = true
-  const offset = (currentPage.value - 1) * pageSize.value;
   _httpServices.list<ResponseDTO<HeroesResponseModel>>(
-    `/heroes?offset=${offset}&limit=${pageSize.value}`)
+    `/heroes?current_page=${currentPage.value}&per_page=${pageSize.value}`)
     .then(res => {
       heroes.value = res.data.model.data
       total.value = res.data.model.total
-      pageSize.value = res.data.model.limit
+      pageSize.value = res.data.model.per_page
       fullscreenLoading.value = false
     })
 }
@@ -37,13 +36,12 @@ function onSubmitFavorite(id: string) {
   loadingId.value = id
   _httpServices.create(`/heroes?id=${id}`)
     .then(() => {
-      const offset = (currentPage.value - 1) * pageSize.value
       _httpServices.list<ResponseDTO<HeroesResponseModel>>(
-        `/heroes?offset=${offset}&limit=${pageSize.value}`)
+        `/heroes?current_page=${currentPage.value}&per_page=${pageSize.value}`)
         .then(res => {
           heroes.value = res.data.model.data
           total.value = res.data.model.total
-          pageSize.value = res.data.model.limit
+          pageSize.value = res.data.model.per_page
           favoriteLoading.value = false
           loadingId.value = null
         })

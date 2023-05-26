@@ -2,11 +2,13 @@ export type ResponseDTO<T> = {
   status: string
   message: string
   model: {
-    page: number
-    limit: number
-    total: number
-    count: number
     data: Array<T>
+    next_page_url: string
+    path: string
+    per_page: number
+    prev_page_url: string
+    to: number
+    total: number
   }
 }
 
