@@ -3,7 +3,6 @@ import {ref, onMounted} from 'vue';
 import HttpServices from "@/services";
 import type {HeroesResponseModel, ResponseDTO} from "@/types";
 import {Star} from "@element-plus/icons-vue";
-import {useLoading} from "vue3-loading-overlay";
 import LoadingComponent from "@/components/LoadingComponent.vue";
 
 
