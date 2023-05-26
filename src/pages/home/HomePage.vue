@@ -3,6 +3,8 @@ import {ref, onMounted} from 'vue';
 import HttpServices from "@/services";
 import type {HeroesResponseModel, ResponseDTO} from "@/types";
 import {Star} from "@element-plus/icons-vue";
+import {useLoading} from "vue3-loading-overlay";
+import LoadingComponent from "@/components/LoadingComponent.vue";
 
 
 const _httpServices = new HttpServices()
@@ -12,8 +14,8 @@ const loadingId = ref<string | null>(String())
 const currentPage = ref(1)
 const pageSize = ref(30)
 const total = ref(Number())
-const disabled = ref(false)
 const fullscreenLoading = ref(true)
+const mainLoading = ref(true)
 
 onMounted(() => {
   onSubmitList()
@@ -28,6 +30,7 @@ function onSubmitList() {
       total.value = res.data.model.total
       pageSize.value = res.data.model.per_page
       fullscreenLoading.value = false
+      mainLoading.value = false
     })
 }
 
@@ -62,6 +65,7 @@ function handleCurrentChange(val: number) {
 </script>
 
 <template>
+  <LoadingComponent :loading="mainLoading"/>
   <el-container>
     <el-header v-if="heroes.length > 0">
       <el-menu
@@ -95,7 +99,11 @@ function handleCurrentChange(val: number) {
               </div>
             </div>
             <div @click="onSubmitFavorite(hero.id)" class="delete-button">
-              <el-button :loading="loadingId === hero.id && favoriteLoading" :icon="Star" circle/>
+              <el-button
+                :loading="loadingId === hero.id && favoriteLoading"
+                :disabled="favoriteLoading"
+                :icon="Star"
+                circle/>
               <el-text style="margin-left: 10px">{{ hero.votes }}</el-text>
             </div>
           </el-card>
@@ -107,7 +115,7 @@ function handleCurrentChange(val: number) {
           v-model:page-size="pageSize"
           v-loading.fullscreen.lock="fullscreenLoading"
           :page-sizes="[20, 30, 50, 100]"
-          :disabled="disabled"
+          :disabled="favoriteLoading"
           background
           layout="sizes, prev, pager, next"
           :total="total"
