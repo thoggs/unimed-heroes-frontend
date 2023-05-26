@@ -9,8 +9,8 @@ const _httpServices = new HttpServices()
 const heroes = ref<HeroesResponseModel[]>([])
 const favoriteLoading = ref(false)
 const loadingId = ref<string | null>(String())
-const currentPage = ref(Number())
-const pageSize = ref(Number())
+const currentPage = ref(1)
+const pageSize = ref(30)
 const total = ref(Number())
 const disabled = ref(false)
 const fullscreenLoading = ref(true)
@@ -19,15 +19,15 @@ onMounted(() => {
   onSubmitList()
 })
 
-function onSubmitList(page = 1, limit = 30) {
+function onSubmitList() {
   fullscreenLoading.value = true
+  const offset = (currentPage.value - 1) * pageSize.value;
   _httpServices.list<ResponseDTO<HeroesResponseModel>>(
-    `/heroes?page=${page}&limit=${limit}`)
+    `/heroes?offset=${offset}&limit=${pageSize.value}`)
     .then(res => {
       heroes.value = res.data.model.data
       total.value = res.data.model.total
-      pageSize.value = res.data.model.count
-      currentPage.value = res.data.model.page
+      pageSize.value = res.data.model.limit
       fullscreenLoading.value = false
     })
 }
@@ -37,13 +37,13 @@ function onSubmitFavorite(id: string) {
   loadingId.value = id
   _httpServices.create(`/heroes?id=${id}`)
     .then(() => {
+      const offset = (currentPage.value - 1) * pageSize.value
       _httpServices.list<ResponseDTO<HeroesResponseModel>>(
-        `/heroes?page=${currentPage.value}&limit=${pageSize.value}`)
+        `/heroes?offset=${offset}&limit=${pageSize.value}`)
         .then(res => {
           heroes.value = res.data.model.data
           total.value = res.data.model.total
-          pageSize.value = res.data.model.count
-          currentPage.value = res.data.model.page
+          pageSize.value = res.data.model.limit
           favoriteLoading.value = false
           loadingId.value = null
         })
@@ -51,11 +51,15 @@ function onSubmitFavorite(id: string) {
 }
 
 function handleSizeChange(val: number) {
-  onSubmitList(currentPage.value, val)
+  pageSize.value = val
+  currentPage.value = 1
+  onSubmitList()
 }
 
 function handleCurrentChange(val: number) {
-  onSubmitList(val, pageSize.value)
+  console.log(`current page: ${val}`)
+  currentPage.value = val
+  onSubmitList()
 }
 </script>
 
