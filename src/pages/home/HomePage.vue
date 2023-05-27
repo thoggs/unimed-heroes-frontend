@@ -32,7 +32,7 @@ useDark({
 })
 
 const updateVisibleHeroes = () => {
-  const screenWidth = window.innerWidth; // Obtém a largura da tela
+  const screenWidth = window.innerWidth
   const sizeMappings = {
     2252: 56,
     1936: 54,
@@ -134,7 +134,13 @@ watch(heroes, updateVisibleHeroes)
             <div :style="{padding: '14px'}">
               <el-text tag="b" truncated>{{ hero.name }}</el-text>
               <div class="text-description-container">
-                <text class="text-content" type="info">{{ hero.description }}</text>
+                <text class="text-content" type="info">
+                  {{
+                    hero.description.length !== 0 ?
+                      hero.description :
+                      'There is no description for this hero on marvel services, sorry to disappoint you.'
+                  }}
+                </text>
               </div>
             </div>
             <div class="delete-button">
