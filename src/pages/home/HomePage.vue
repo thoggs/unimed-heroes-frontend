@@ -31,7 +31,7 @@ useDark({
   initialValue: 'dark',
 })
 
-const updateVisibleHeroes = () => {
+function updateVisibleHeroes() {
   const screenWidth = window.innerWidth
   const sizeMappings = {
     2252: 56,
@@ -67,6 +67,7 @@ function onSubmitList() {
       pageSize.value = res.data.model.per_page
       fullscreenLoading.value = false
       mainLoading.value = false
+      gotoTop()
     })
 }
 
@@ -96,6 +97,14 @@ function handleSizeChange(val: number) {
 function handleCurrentChange(val: number) {
   currentPage.value = val
   onSubmitList()
+}
+
+function gotoTop() {
+  window.scroll({
+    top: 0,
+    left: 0,
+    behavior: 'smooth'
+  });
 }
 
 watch(heroes, updateVisibleHeroes)
