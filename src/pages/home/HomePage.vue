@@ -4,6 +4,8 @@ import HttpServices from "@/services";
 import type {HeroesResponseModel, ResponseDTO} from "@/types";
 import {Star} from "@element-plus/icons-vue";
 import LoadingComponent from "@/components/LoadingComponent.vue";
+import {useDark} from '@vueuse/core'
+import LogoComponent from "@/components/LogoComponent.vue";
 
 
 const _httpServices = new HttpServices()
@@ -18,6 +20,10 @@ const mainLoading = ref(true)
 
 onMounted(() => {
   onSubmitList()
+})
+
+useDark({
+  initialValue: 'dark',
 })
 
 function onSubmitList() {
@@ -57,7 +63,6 @@ function handleSizeChange(val: number) {
 }
 
 function handleCurrentChange(val: number) {
-  console.log(`current page: ${val}`)
   currentPage.value = val
   onSubmitList()
 }
@@ -67,15 +72,17 @@ function handleCurrentChange(val: number) {
   <LoadingComponent :loading="mainLoading"/>
   <el-container>
     <el-header v-if="heroes.length > 0">
-      <el-menu
-        default-active="1"
-        class="el-menu-demo"
-        mode="horizontal">
-        <el-menu-item index="1">Marvel Heroes</el-menu-item>
-      </el-menu>
+      <div class="toolbar">
+        <LogoComponent/>
+      </div>
     </el-header>
     <el-main class="main-container">
-      <div style="display: flex; width: 100%; flex-wrap: wrap; justify-content: center">
+      <el-space
+        wrap
+        style="justify-content: center"
+        alignment="center"
+        direction="horizontal"
+        size="large">
         <div v-for="hero in heroes" :key="hero.id">
           <el-card :body-style="{padding: 0}" class="card-content">
             <div class="image-wrapper">
@@ -108,7 +115,7 @@ function handleCurrentChange(val: number) {
             </div>
           </el-card>
         </div>
-      </div>
+      </el-space>
       <div v-if="total" class="pagination-container">
         <el-pagination
           v-model:current-page="currentPage"
@@ -129,7 +136,11 @@ function handleCurrentChange(val: number) {
 
 <style scoped>
 .main-container {
-  padding-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 70px;
 }
 
 .pagination-container {
@@ -165,7 +176,6 @@ function handleCurrentChange(val: number) {
 
 .card-content {
   width: 300px;
-  margin: 10px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -204,5 +214,14 @@ function handleCurrentChange(val: number) {
   align-items: flex-end;
   padding: 10px;
   height: 100%;
+}
+
+.toolbar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  right: 20px;
 }
 </style>
