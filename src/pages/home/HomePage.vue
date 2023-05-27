@@ -116,44 +116,48 @@ watch(heroes, updateVisibleHeroes)
         alignment="center"
         direction="horizontal"
         size="large">
-        <div v-for="hero in heroes" :key="hero.id">
-          <el-card :body-style="{padding: 0}" class="card-content">
-            <div class="image-wrapper">
-              <div class="image-container">
-                <div class="image-crop">
-                  <el-image
-                    :src="hero.thumbnail"
-                    :fit="'fill'"
-                    class="image"
-                    alt="hero-image"
-                    crossorigin="anonymous"
-                  />
+        <el-row :gutter="16" justify="center">
+          <div v-for="hero in heroes" :key="hero.id">
+            <el-col style="padding-bottom: 16px">
+              <el-card :body-style="{padding: 0}" class="card-content">
+                <div class="image-wrapper">
+                  <div class="image-container">
+                    <div class="image-crop">
+                      <el-image
+                        :src="hero.thumbnail"
+                        :fit="'fill'"
+                        class="image"
+                        alt="hero-image"
+                        crossorigin="anonymous"
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div :style="{padding: '14px'}">
-              <el-text tag="b" truncated>{{ hero.name }}</el-text>
-              <div class="text-description-container">
-                <text class="text-content" type="info">
-                  {{
-                    hero.description.length !== 0 ?
-                      hero.description :
-                      'There is no description for this hero on marvel services, sorry to disappoint you.'
-                  }}
-                </text>
-              </div>
-            </div>
-            <div class="delete-button">
-              <el-button
-                @click="onSubmitFavorite(hero.id)"
-                :loading="loadingId === hero.id && favoriteLoading"
-                :disabled="favoriteLoading"
-                :icon="Star"
-                circle/>
-              <el-text style="margin-left: 10px">{{ hero.votes }}</el-text>
-            </div>
-          </el-card>
-        </div>
+                <div :style="{padding: '14px'}">
+                  <el-text tag="b" truncated>{{ hero.name }}</el-text>
+                  <div class="text-description-container">
+                    <text class="text-content" type="info">
+                      {{
+                        hero.description.length !== 0 ?
+                          hero.description :
+                          'There is no description for this hero on marvel services, sorry to disappoint you.'
+                      }}
+                    </text>
+                  </div>
+                </div>
+                <div class="delete-button">
+                  <el-button
+                    @click="onSubmitFavorite(hero.id)"
+                    :loading="loadingId === hero.id && favoriteLoading"
+                    :disabled="favoriteLoading"
+                    :icon="Star"
+                    circle/>
+                  <el-text style="margin-left: 10px">{{ hero.votes }}</el-text>
+                </div>
+              </el-card>
+            </el-col>
+          </div>
+        </el-row>
       </el-space>
       <div v-if="total" class="pagination-container">
         <el-pagination
@@ -179,6 +183,7 @@ watch(heroes, updateVisibleHeroes)
   align-items: center;
   justify-content: center;
   margin-top: 70px;
+  margin-bottom: 70px;
 }
 
 .pagination-container {
