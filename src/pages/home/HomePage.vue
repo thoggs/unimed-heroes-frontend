@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref, onMounted} from 'vue';
+import {ref, onMounted, onBeforeUnmount, watch} from 'vue';
 import HttpServices from "@/services";
 import type {HeroesResponseModel, ResponseDTO} from "@/types";
 import {Star} from "@element-plus/icons-vue";
@@ -13,18 +13,49 @@ const heroes = ref<HeroesResponseModel[]>([])
 const favoriteLoading = ref(false)
 const loadingId = ref<string | null>(String())
 const currentPage = ref(1)
-const pageSize = ref(50)
+const pageSize = ref(49)
 const total = ref(Number())
 const fullscreenLoading = ref(true)
 const mainLoading = ref(true)
 
 onMounted(() => {
-  onSubmitList()
+  updateVisibleHeroes()
+  window.addEventListener("resize", updateVisibleHeroes)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", updateVisibleHeroes)
 })
 
 useDark({
   initialValue: 'dark',
 })
+
+const updateVisibleHeroes = () => {
+  const screenWidth = window.innerWidth; // Obtém a largura da tela
+  const sizeMappings = {
+    2252: 56,
+    1936: 54,
+    1620: 50,
+    1300: 48,
+    988: 39,
+    768: 38,
+  }
+
+  let newSize = 20;
+  for (const [size, pageSizeValue] of Object.entries(sizeMappings)) {
+    if (screenWidth >= Number(size)) {
+      newSize = pageSizeValue;
+    } else {
+      break
+    }
+  }
+
+  if (pageSize.value !== newSize) {
+    pageSize.value = newSize;
+    onSubmitList()
+  }
+}
 
 function onSubmitList() {
   fullscreenLoading.value = true
@@ -66,6 +97,8 @@ function handleCurrentChange(val: number) {
   currentPage.value = val
   onSubmitList()
 }
+
+watch(heroes, updateVisibleHeroes)
 </script>
 
 <template>
@@ -121,10 +154,9 @@ function handleCurrentChange(val: number) {
           v-model:current-page="currentPage"
           v-model:page-size="pageSize"
           v-loading.fullscreen.lock="fullscreenLoading"
-          :page-sizes="[20, 30, 50, 100]"
           :disabled="favoriteLoading"
           background
-          layout="sizes, prev, pager, next"
+          layout="prev, pager, next"
           :total="total"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
