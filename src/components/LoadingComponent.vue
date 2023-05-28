@@ -33,7 +33,7 @@ export default {
 .spinner {
   width: 40px;
   height: 40px;
-  border: 2px solid #f3f3f3;
+  border: 2px solid #666666;
   border-top: 2px solid #3498db;
   border-radius: 50%;
   animation: spin 2s linear infinite;
